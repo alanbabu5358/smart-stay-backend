@@ -4,12 +4,12 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { name, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await pool.query(
       "INSERT INTO users (name, password) VALUES (?, ?)",
-      [username, hashedPassword]
+      [name, hashedPassword]
     );
 
     res.json({ message: "User registered", id: result.insertId });
@@ -21,8 +21,11 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { username, password } = req.body;
-    const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username]);
+    const { name, password } = req.body; 
+    const [rows] = await pool.query(
+      "SELECT * FROM users WHERE name = ?",  //
+      [name]
+    );
 
     if (rows.length === 0) return res.status(400).json({ error: "User not found" });
 
