@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
   res.send('Smart Stay Backend is running');
 });
 
-// User routes (FIXED PATH)
+// User routes
 const userRoutes = require("./routes/users");
 app.use("/api/users", userRoutes);
 
