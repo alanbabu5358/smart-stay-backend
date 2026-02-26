@@ -4,12 +4,12 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   try {
-    const { name, password } = req.body;
+    const { name, password, email } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await pool.query(
-      "INSERT INTO users (name, password) VALUES (?, ?)",
-      [name, hashedPassword]
+      "INSERT INTO users (name, password, email) VALUES (?, ?, ?)",
+      [name, hashedPassword, email]
     );
 
     res.json({ message: "User registered", id: result.insertId });
@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
   try {
     const { name, password } = req.body; 
     const [rows] = await pool.query(
-      "SELECT * FROM users WHERE name = ?",  //
+      "SELECT * FROM users WHERE name = ?", 
       [name]
     );
 
