@@ -14,7 +14,7 @@ exports.updateUser = async (req, res) => {
   try {
     const { id } = req.params;
     const { username } = req.body;
-    const [result] = await pool.query("UPDATE users SET username = ? WHERE id = ?", [username, id]);
+    const [result] = await pool.query("UPDATE users SET name = ? WHERE id = ?", [username, id]);
 
     res.json({ message: "User updated", affectedRows: result.affectedRows });
   } catch (err) {
