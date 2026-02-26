@@ -2,7 +2,7 @@ const db = require("../config/db");
 
 const User = {
 
-    // ================= GET ALL USERS =================
+    //GET ALL USERS
     getAllUsers: () => {
         return new Promise((resolve, reject) => {
             db.query(
@@ -15,7 +15,7 @@ const User = {
         });
     },
 
-    // ================= CREATE USER =================
+    //CREATE USER
     createUser: (name, email, password) => {
         return new Promise((resolve, reject) => {
             const sql =
@@ -32,7 +32,7 @@ const User = {
         });
     },
 
-    // ================= GET USER BY EMAIL =================
+    //GET USER BY EMAIL
     getUserByEmail: (email) => {
         return new Promise((resolve, reject) => {
             db.query(
@@ -46,7 +46,7 @@ const User = {
         });
     },
 
-    // ================= UPDATE USER =================
+    //UPDATE USER
     updateUser: (id, name, email) => {
         return new Promise((resolve, reject) => {
             const sql =
@@ -63,7 +63,7 @@ const User = {
         });
     },
 
-    // ================= DELETE USER =================
+    //DELETE USER
     deleteUser: (id) => {
         return new Promise((resolve, reject) => {
             const sql =
