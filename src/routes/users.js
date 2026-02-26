@@ -1,12 +1,21 @@
-const express=require("express");
+const express = require("express");
+const router = express.Router();
 
-const router=express.Router();
+const authController = require("../controllers/authController");
+const userController = require("../controllers/userController");
 
-const authController=
-require("../controllers/authController");
+
+//AUTH ROUTES 
 
 router.post("/register", authController.register);
-
 router.post("/login", authController.login);
 
-module.exports=router;
+
+//USER CRUD ROUTES
+
+router.get("/", userController.getAllUsers);
+router.put("/:id", userController.updateUser);
+router.delete("/:id", userController.deleteUser);
+
+
+module.exports = router;
