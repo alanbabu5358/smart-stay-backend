@@ -1,89 +1,35 @@
-const User = require("../models/User");
-
-
-//GET ALL USERS
+const pool = require("../db");
 
 exports.getAllUsers = async (req, res) => {
-    try {
-
-        const users = await User.getAllUsers();
-
-        res.json(users);
-
-    } catch (err) {
-
-        res.status(500).json({
-            error: err.message
-        });
-
-    }
+  try {
+    const [rows] = await pool.query("SELECT id, username FROM users");
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 };
-
-
-//UPDATE USER
 
 exports.updateUser = async (req, res) => {
-    try {
+  try {
+    const { id } = req.params;
+    const { username } = req.body;
+    const [result] = await pool.query("UPDATE users SET username = ? WHERE id = ?", [username, id]);
 
-        const id = req.params.id;
-        const { name, email } = req.body;
-
-        if (!name || !email) {
-            return res.status(400).json({
-                message: "Missing fields"
-            });
-        }
-
-        const result = await User.updateUser(
-            id,
-            name,
-            email
-        );
-
-        if (result === 0) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
-
-        res.json({
-            message: "User updated successfully"
-        });
-
-    } catch (err) {
-
-        res.status(500).json({
-            error: err.message
-        });
-
-    }
+    res.json({ message: "User updated", affectedRows: result.affectedRows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 };
 
-
-//DELETE USER
-
 exports.deleteUser = async (req, res) => {
-    try {
-
-        const id = req.params.id;
-
-        const result = await User.deleteUser(id);
-
-        if (result === 0) {
-            return res.status(404).json({
-                message: "User not found"
-            });
-        }
-
-        res.json({
-            message: "User deleted successfully"
-        });
-
-    } catch (err) {
-
-        res.status(500).json({
-            error: err.message
-        });
-
-    }
+  try {
+    const { id } = req.params;
+    const [result] = await pool.query("DELETE FROM users WHERE id = ?", [id]);
+    res.json({ message: "User deleted", affectedRows: result.affectedRows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
 };
