@@ -2,7 +2,7 @@ const pool = require("../config/db");
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT id, username FROM users");
+    const [rows] = await pool.query("SELECT id, name FROM users");
     res.json(rows);
   } catch (err) {
     console.error(err);
