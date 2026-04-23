@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 module.exports = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
-  // Expect: Bearer TOKEN
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {

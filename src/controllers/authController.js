@@ -2,16 +2,16 @@ const pool = require("../config/db");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// ✅ REGISTER
+// REGISTER
 exports.register = async (req, res) => {
   try {
-    const { name, password, email } = req.body;
+    const { name, email, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const [result] = await pool.query(
-      "INSERT INTO users (name, password, email) VALUES (?, ?, ?)",
-      [name, hashedPassword, email]
+      "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+      [name, email, hashedPassword]
     );
 
     res.json({
@@ -25,13 +25,13 @@ exports.register = async (req, res) => {
   }
 };
 
-// ✅ LOGIN (FIXED)
+// LOGIN
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;  // ✅ FIX
+    const { email, password } = req.body;
 
     const [rows] = await pool.query(
-      "SELECT * FROM users WHERE email = ?", // ✅ FIX
+      "SELECT * FROM users WHERE email = ?",
       [email]
     );
 
@@ -57,6 +57,24 @@ exports.login = async (req, res) => {
       message: "Login successful",
       token
     });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// GET PROFILE
+exports.getProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const [rows] = await pool.query(
+      "SELECT id, name, email FROM users WHERE id = ?",
+      [userId]
+    );
+
+    res.json(rows[0]);
 
   } catch (err) {
     console.error(err);
